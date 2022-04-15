@@ -29,7 +29,7 @@ class ShoppingController extends GetxController {
           backgroundColor: Colors.grey,
           borderRadius: 25,
           margin: const EdgeInsets.all(24),
-          duration: const Duration(seconds: 2),
+          duration: const Duration(milliseconds: 1200),
         ),
       );
     }
