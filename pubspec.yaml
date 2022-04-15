@@ -49,6 +49,8 @@ dependencies:
 
   #for badges
   badges: ^2.0.2
+  #for carousel cards
+  card_swiper: ^2.0.3
 
 dev_dependencies:
   flutter_test:

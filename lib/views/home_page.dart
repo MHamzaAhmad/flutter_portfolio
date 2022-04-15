@@ -1,10 +1,15 @@
+import 'dart:ui';
+
 import 'package:badges/badges.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/controllers/shopping_controller.dart';
 import 'package:portfolio/models/product.dart';
+import 'package:portfolio/utils/constants.dart';
+import 'package:portfolio/views/cart.dart';
 import 'package:portfolio/widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,27 +26,27 @@ class _HomePageState extends State<HomePage> {
     Product(
       name: 'Foam',
       image: 'assets/yeezy_foam.png',
-      price: 150.0,
+      price: 135.0,
     ),
     Product(
       name: 'Air Max',
       image: 'assets/air_max.png',
-      price: 350.0,
+      price: 320.0,
     ),
     Product(
       name: 'Muslin',
       image: 'assets/muslin.png',
-      price: 350.0,
+      price: 275.0,
     ),
     Product(
       name: 'Oceans',
       image: 'assets/oceans.png',
-      price: 350.0,
+      price: 120.0,
     ),
     Product(
       name: 'Shadow',
       image: 'assets/shadow_6000.png',
-      price: 350.0,
+      price: 480.0,
     ),
   ];
 
@@ -59,55 +64,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'Portfolio',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.grey.shade300.withOpacity(0.6),
+          elevation: 0,
+          leading: const Center(
+            child: FaIcon(
+              FontAwesomeIcons.bars,
+              color: Colors.black,
+            ),
+          ),
+          title: const Text(
+            'Portfolio',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: PageView(
+        body: PageView(
           controller: _pageController,
           children: [
-            Container(
-              color: const Color(0xffebeaef),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: GridView.count(
-                physics: const BouncingScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 30,
-                crossAxisSpacing: 20,
-                childAspectRatio: 0.74,
-                children: products.map((e) => ProductCard(product: e)).toList(),
-              ),
-            ),
+            MainPage(products: products),
             Obx(
               () => shop.totalProducts != 0
-                  ? Container(
-                      color: const Color(0xffebeaef),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: GridView.count(
-                        physics: const BouncingScrollPhysics(),
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 30,
-                        crossAxisSpacing: 20,
-                        childAspectRatio: 0.74,
-                        children: shop.boughtProducts
-                            .map((e) => ProductCard(product: e, remove: true))
-                            .toList(),
-                      ),
-                    )
+                  ? const CartScreen()
                   : const Center(
                       child: Text(
-                        'No products',
+                        'Come on dude! lets buy something!',
                         style: TextStyle(fontSize: 18),
                       ),
                     ),
@@ -128,41 +114,63 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      extendBody: true,
-      bottomNavigationBar: SnakeNavigationBar.color(
-        behaviour: SnakeBarBehaviour.floating,
-        snakeShape: SnakeShape.circle,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        padding: const EdgeInsets.all(10),
-        snakeViewColor: Colors.black,
-        backgroundColor: Colors.grey[300],
-        unselectedItemColor: Colors.blueGrey,
-        currentIndex: index,
-        onTap: (i) {
-          _pageController.animateToPage(
-            i,
-            curve: Curves.decelerate,
-            duration: const Duration(milliseconds: 220),
-          );
-          setState(() => index = i);
-        },
-        items: [
-          const BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.house), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Obx(
-              () => Badge(
-                badgeContent: Text(shop.totalProducts.toString()),
-                badgeColor: Colors.yellow,
-                child: const FaIcon(FontAwesomeIcons.bagShopping),
+        extendBody: true,
+        bottomNavigationBar: SnakeNavigationBar.color(
+          behaviour: SnakeBarBehaviour.floating,
+          snakeShape: SnakeShape.circle,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          padding: const EdgeInsets.all(10),
+          snakeViewColor: Colors.black,
+          backgroundColor: Colors.grey[300],
+          unselectedItemColor: Colors.blueGrey,
+          currentIndex: index,
+          onTap: (i) {
+            _pageController.animateToPage(
+              i,
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 220),
+            );
+            setState(() => index = i);
+          },
+          items: [
+            const BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.house), label: 'Home'),
+            BottomNavigationBarItem(
+              icon: Obx(
+                () => Badge(
+                  badgeContent: Text(shop.totalProducts.toString()),
+                  badgeColor: Colors.yellow,
+                  child: const FaIcon(FontAwesomeIcons.bagShopping),
+                ),
               ),
+              label: 'Shop',
             ),
-            label: 'Shop',
-          ),
-          const BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.user), label: 'Profile'),
-        ],
+            const BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.user), label: 'Profile'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  final List<Product> products;
+  const MainPage({Key? key, required this.products}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.all(10),
+      child: GridView.count(
+        physics: const BouncingScrollPhysics(),
+        crossAxisCount: 2,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 18,
+        childAspectRatio: 0.65,
+        children: products.map((e) => ProductCard(product: e)).toList(),
       ),
     );
   }
