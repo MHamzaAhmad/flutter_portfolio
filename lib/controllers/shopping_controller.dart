@@ -18,20 +18,7 @@ class ShoppingController extends GetxController {
       productsMap[product.name] = product;
     } else {
       incrementProductQuantity(product);
-      Get.showSnackbar(
-        GetSnackBar(
-          messageText: Text(
-            '${product.name}\'s quantity increased!',
-            style: const TextStyle(
-              color: Colors.black87,
-            ),
-          ),
-          backgroundColor: Colors.grey,
-          borderRadius: 25,
-          margin: const EdgeInsets.all(24),
-          duration: const Duration(milliseconds: 1200),
-        ),
-      );
+      showSnackBar('${product.name} added to cart');
     }
     update();
   }
@@ -52,6 +39,29 @@ class ShoppingController extends GetxController {
     } else {
       removeProduct(product);
     }
+    update();
+  }
+
+  void checkout(BuildContext context) {
+    productsMap.clear();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        content: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Text(
+            'Open your door, Package is at your door step.\n\n Yeah! it\'s that fast 🙃',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Okay'),
+          ),
+        ],
+      ),
+    );
     update();
   }
 

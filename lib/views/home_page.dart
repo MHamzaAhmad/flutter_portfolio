@@ -1,12 +1,13 @@
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/controllers/shopping_controller.dart';
+import 'package:portfolio/controllers/warehouse_controller.dart';
 import 'package:portfolio/models/product.dart';
 import 'package:portfolio/utils/constants.dart';
 import 'package:portfolio/views/cart.dart';
@@ -21,34 +22,35 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final shop = Get.find<ShoppingController>();
+  final warehouse = Get.find<WarehouseController>();
   final PageController _pageController = PageController(initialPage: 0);
-  final List<Product> products = [
-    Product(
-      name: 'Foam',
-      image: 'assets/yeezy_foam.png',
-      price: 135.0,
-    ),
-    Product(
-      name: 'Air Max',
-      image: 'assets/air_max.png',
-      price: 320.0,
-    ),
-    Product(
-      name: 'Muslin',
-      image: 'assets/muslin.png',
-      price: 275.0,
-    ),
-    Product(
-      name: 'Oceans',
-      image: 'assets/oceans.png',
-      price: 120.0,
-    ),
-    Product(
-      name: 'Shadow',
-      image: 'assets/shadow_6000.png',
-      price: 480.0,
-    ),
-  ];
+  // final List<Product> products = [
+  //   Product(
+  //     name: 'Foam',
+  //     image: 'assets/yeezy_foam.png',
+  //     price: 135.0,
+  //   ),
+  //   Product(
+  //     name: 'Air Max',
+  //     image: 'assets/air_max.png',
+  //     price: 320.0,
+  //   ),
+  //   Product(
+  //     name: 'Muslin',
+  //     image: 'assets/muslin.png',
+  //     price: 275.0,
+  //   ),
+  //   Product(
+  //     name: 'Oceans',
+  //     image: 'assets/oceans.png',
+  //     price: 120.0,
+  //   ),
+  //   Product(
+  //     name: 'Shadow',
+  //     image: 'assets/shadow_6000.png',
+  //     price: 480.0,
+  //   ),
+  // ];
 
   int index = 0;
 
@@ -87,7 +89,17 @@ class _HomePageState extends State<HomePage> {
         body: PageView(
           controller: _pageController,
           children: [
-            MainPage(products: products),
+            Obx(
+              () => warehouse.products.isNotEmpty
+                  ? MainPage(products: warehouse.products as List<Product>)
+                  : const Center(
+                      child: SpinKitPouringHourGlassRefined(
+                        color: Colors.yellow,
+                        size: 60,
+                        strokeWidth: 1.5,
+                      ),
+                    ),
+            ),
             Obx(
               () => shop.totalProducts != 0
                   ? const CartScreen()
@@ -169,7 +181,7 @@ class MainPage extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 15,
         crossAxisSpacing: 18,
-        childAspectRatio: 0.65,
+        childAspectRatio: 0.62,
         children: products.map((e) => ProductCard(product: e)).toList(),
       ),
     );
