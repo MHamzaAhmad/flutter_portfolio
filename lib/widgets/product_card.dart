@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Container(
-          color: Colors.white60,
+          color: Colors.white,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -45,8 +45,8 @@ class ProductCard extends StatelessWidget {
                       warehouse.toggleFav(product);
                     },
                     icon: warehouse.availableProducts[product.id]!.fav
-                        ? const Icon(Icons.favorite, size: 18)
-                        : const Icon(Icons.favorite_border_outlined, size: 18),
+                        ? const Icon(Icons.favorite, size: 20)
+                        : const Icon(Icons.favorite_border_outlined, size: 20),
                   ),
                 ),
               ),
@@ -54,9 +54,15 @@ class ProductCard extends StatelessWidget {
                 child: Hero(
                   tag: product.id.toString(),
                   child: Center(
-                    child: CircleAvatar(
-                      radius: 70,
-                      backgroundImage: NetworkImage(product.image),
+                    // child: CircleAvatar(
+                    //   radius: 70,
+                    //   backgroundImage: NetworkImage(product.image),
+                    // ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Image.network(product.image),
                     ),
                   ),
                 ),
