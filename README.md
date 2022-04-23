@@ -1,6 +1,6 @@
 # Portfolio Project
 
-This is portfolio project.
+This is a simple e-commerce app, I made as a porfolio project.
 
 It takes data from FakeStoreApi and shows it in elegant way.
 It has following screens
