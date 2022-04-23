@@ -89,17 +89,18 @@ class _HomePageState extends State<HomePage> {
         body: PageView(
           controller: _pageController,
           children: [
-            Obx(
-              () => warehouse.products.isNotEmpty
-                  ? MainPage(products: warehouse.products as List<Product>)
-                  : const Center(
-                      child: SpinKitPouringHourGlassRefined(
-                        color: Colors.yellow,
-                        size: 60,
-                        strokeWidth: 1.5,
-                      ),
-                    ),
-            ),
+            Obx(() => MainPage(products: warehouse.products)),
+            // Obx(
+            //   () => warehouse.products.isNotEmpty
+            //       ? MainPage(products: warehouse.products as List<Product>)
+            //       : const Center(
+            //           child: SpinKitPouringHourGlassRefined(
+            //             color: Colors.yellow,
+            //             size: 60,
+            //             strokeWidth: 1.5,
+            //           ),
+            //         ),
+            // ),
             Obx(
               () => shop.totalProducts != 0
                   ? const CartScreen()
@@ -167,23 +168,89 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class MainPage extends StatelessWidget {
-  final List<Product> products;
+class MainPage extends StatefulWidget {
+  final List products;
   const MainPage({Key? key, required this.products}) : super(key: key);
 
   @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  TextEditingController _searchController = TextEditingController();
+  String query = '';
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: backgroundColor,
-      padding: const EdgeInsets.all(10),
-      child: GridView.count(
-        physics: const BouncingScrollPhysics(),
-        crossAxisCount: 2,
-        mainAxisSpacing: 15,
-        crossAxisSpacing: 18,
-        childAspectRatio: 0.62,
-        children: products.map((e) => ProductCard(product: e)).toList(),
-      ),
-    );
+    List ps = widget.products
+        .where((product) =>
+            product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    return widget.products.isNotEmpty
+        ? Container(
+            color: backgroundColor,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 60, bottom: 10),
+                  child: TextField(
+                    controller: _searchController,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search, color: Colors.black),
+                      suffixIcon: InkWell(
+                        child: const Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
+                        onTap: () {
+                          _searchController.clear();
+                          setState(() => query = '');
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onChanged: (val) => setState(() => query = val),
+                  ),
+                ),
+                ps.isNotEmpty
+                    ? Expanded(
+                        child: GridView.count(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 18,
+                          childAspectRatio: 0.62,
+                          children:
+                              ps.map((e) => ProductCard(product: e)).toList(),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'No products found for "$query"',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          )
+        : const Center(
+            child: SpinKitPouringHourGlassRefined(
+              color: Colors.yellow,
+              size: 60,
+              strokeWidth: 1.5,
+            ),
+          );
   }
 }

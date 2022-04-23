@@ -40,5 +40,11 @@ class WarehouseController extends GetxController {
     update();
   }
 
+  List search(String q) {
+    return availableProducts.values.where((product) {
+      return product.name.toLowerCase().contains(q.toLowerCase());
+    }).toList();
+  }
+
   List get products => availableProducts.value.values.toList();
 }

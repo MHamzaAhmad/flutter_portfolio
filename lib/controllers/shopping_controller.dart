@@ -16,9 +16,11 @@ class ShoppingController extends GetxController {
   void addProduct(Product product) {
     if (productsMap[product.name] == null) {
       productsMap[product.name] = product;
+      showSnackBar('Added ${product.name} to cart');
     } else {
       incrementProductQuantity(product);
-      showSnackBar('${product.name} added to cart');
+      showSnackBar(
+          '${product.name}\'s quantity incremented to ${productsMap[product.name].quantity}');
     }
     update();
   }

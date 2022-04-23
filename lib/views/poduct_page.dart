@@ -5,7 +5,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/controllers/shopping_controller.dart';
-import 'package:portfolio/controllers/warehouse_controller.dart';
 import 'package:portfolio/models/product.dart';
 import 'package:portfolio/utils/constants.dart';
 
@@ -15,11 +14,11 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final warehouse = Get.find<WarehouseController>();
     final shop = Get.find<ShoppingController>();
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: true,
         // backgroundColor: backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.grey.shade300.withOpacity(0.6),
@@ -197,7 +196,6 @@ class ProductPage extends StatelessWidget {
                     ),
                     onTap: () {
                       shop.addProduct(product);
-                      showSnackBar('Added to Cart');
                     },
                   ),
                   const SizedBox(height: 20)

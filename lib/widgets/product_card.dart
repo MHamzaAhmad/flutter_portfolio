@@ -23,6 +23,7 @@ class ProductCard extends StatelessWidget {
     final warehouse = Get.find<WarehouseController>();
     return InkWell(
       onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
         Get.to(
           () => ProductPage(
             product: product,
