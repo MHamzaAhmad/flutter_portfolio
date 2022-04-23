@@ -15,3 +15,9 @@ Wrapped up with one home page that utilizes a nice bottom to move between screen
 
 - Flutter
 - GetX
+
+## Technologies I Know
+
+- Firebase
+- Provider
+
